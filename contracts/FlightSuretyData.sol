@@ -122,6 +122,14 @@ contract FlightSuretyData {
         delete authorizedContracts[contractAddress];
     }
 
+    function isAirline(address airline) 
+                            external 
+                            view 
+                            returns(bool) 
+    {
+        return airlines[airline].isRegistered;
+    }
+
 
     /********************************************************************************************/
     /*                                     SMART CONTRACT FUNCTIONS                             */
@@ -138,6 +146,8 @@ contract FlightSuretyData {
     {
         require(airline != address(0), "'airline' must be a valid address.");
         require(!airlines[airline].isRegistered, "Airline is already registered.");
+        require(airlines[msg.sender].isRegistered, "Airline registering another airline must be registered.");
+        require(airlines[msg.sender].isFunded, "Airline registering another airline must be funded.");
 
         airlines[airline] = AirlineProfile({ isRegistered: true, isFunded: false });
     }
