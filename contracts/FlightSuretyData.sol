@@ -102,7 +102,7 @@ contract FlightSuretyData {
         operational = mode;
     }
 
-    function authorizeContract
+    function authorizeCaller
                             (
                                 address contractAddress
                             )
@@ -112,7 +112,7 @@ contract FlightSuretyData {
         authorizedContracts[contractAddress] = 1;
     }
 
-    function deauthorizeContract
+    function deauthorizeCaller
                             (
                                 address contractAddress
                             )
