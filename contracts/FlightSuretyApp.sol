@@ -111,7 +111,9 @@ contract FlightSuretyApp {
                             external
                             returns(bool success, uint256 votes)
     {
+        // Airline registering another airline should be already registered
         require(flightSuretyData.isAirline(msg.sender), "Airline is not registered");
+        // Airline registering another airline should be already funded
         require(flightSuretyData.isFunded(msg.sender), "Airline is not funded");
         
         flightSuretyData.registerAirline(airline);
