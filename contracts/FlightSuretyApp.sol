@@ -80,6 +80,7 @@ contract FlightSuretyApp {
     {
         contractOwner = msg.sender;
         flightSuretyData = FlightSuretyData(dataContract);
+        flightSuretyData.registerAirline(msg.sender);
     }
 
     /********************************************************************************************/
@@ -107,6 +108,7 @@ contract FlightSuretyApp {
                             external
                             returns(bool success, uint256 votes)
     {
+        // Require - check whether registered and funded airline
         flightSuretyData.registerAirline(airline);
         return (success, 0);
     }
