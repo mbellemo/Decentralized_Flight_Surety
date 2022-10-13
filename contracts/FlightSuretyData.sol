@@ -65,7 +65,7 @@ contract FlightSuretyData {
 
     modifier requireIsCallerAuthorized()
     {
-        require(authorizedContracts[msg.sender] == 1, "Caller is not contract owner");
+        require(authorizedContracts[msg.sender] == 1, "Caller is not authorized");
         _;
     }
 
@@ -107,7 +107,7 @@ contract FlightSuretyData {
                                 address contractAddress
                             )
                             external
-                            requireContractOwner
+                            //requireContractOwner
     {
         authorizedContracts[contractAddress] = 1;
     }
@@ -117,7 +117,7 @@ contract FlightSuretyData {
                                 address contractAddress
                             )
                             external
-                            requireContractOwner
+                            //requireContractOwner
     {
         delete authorizedContracts[contractAddress];
     }
@@ -128,6 +128,14 @@ contract FlightSuretyData {
                             returns(bool) 
     {
         return airlines[airline].isRegistered;
+    }
+
+    function isFunded(address airline) 
+                            external 
+                            view 
+                            returns(bool) 
+    {
+        return airlines[airline].isRegistered && airlines[airline].isFunded;
     }
 
 

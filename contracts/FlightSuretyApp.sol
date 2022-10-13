@@ -74,13 +74,16 @@ contract FlightSuretyApp {
     */
     constructor
                                 (
-                                    address dataContract
+                                    address dataContract,
+                                    address firstAirline
                                 ) 
                                 public 
     {
         contractOwner = msg.sender;
         flightSuretyData = FlightSuretyData(dataContract);
-        flightSuretyData.registerAirline(msg.sender);
+        address appContract = address(this);
+        flightSuretyData.authorizeCaller(appContract);
+        flightSuretyData.registerAirline(firstAirline);
     }
 
     /********************************************************************************************/
@@ -108,7 +111,9 @@ contract FlightSuretyApp {
                             external
                             returns(bool success, uint256 votes)
     {
-        // Require - check whether registered and funded airline
+        require(flightSuretyData.isAirline(msg.sender), "Airline is not registered");
+        require(flightSuretyData.isFunded(msg.sender), "Airline is not funded");
+        
         flightSuretyData.registerAirline(airline);
         return (success, 0);
     }
@@ -341,4 +346,7 @@ contract FlightSuretyApp {
 
 contract FlightSuretyData {
     function registerAirline(address airline) external;
+    function authorizeCaller(address contractAddress) external;
+    function isAirline(address airline) external returns(bool);
+    function isFunded(address airline) external returns(bool);
 } 
