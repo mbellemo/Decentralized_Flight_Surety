@@ -111,6 +111,8 @@ contract FlightSuretyApp {
                             external
                             returns(bool success, uint256 votes)
     {
+        require(airline != address(0), "'airline' must be a valid address.");
+        require(!flightSuretyData.isAirline(airline), "Airline is already registered.");
         // Airline registering another airline should be already registered
         require(flightSuretyData.isAirline(msg.sender), "Airline is not registered");
         // Airline registering another airline should be already funded

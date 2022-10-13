@@ -18,6 +18,9 @@ contract FlightSuretyData {
         bool isFunded;
     }
 
+    uint private constant REGISTRATION_FEE = 10 ether;
+    uint private airlinesFunded = 0;
+
     mapping(address => AirlineProfile) airlines;                        // Airlines registered and funded
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
@@ -151,10 +154,8 @@ contract FlightSuretyData {
     function registerAirline(address airline) 
                             external 
                             requireIsCallerAuthorized
+                            requireIsOperational
     {
-        require(airline != address(0), "'airline' must be a valid address.");
-        require(!airlines[airline].isRegistered, "Airline is already registered.");
-        
         airlines[airline] = AirlineProfile({ isRegistered: true, isFunded: false });
     }
 
@@ -206,7 +207,13 @@ contract FlightSuretyData {
                             )
                             public
                             payable
+                            requireIsOperational
     {
+        require(this.isAirline(msg.sender), "Airline must be registered");
+        require(!this.isFunded(msg.sender), "Airline is already funded");
+        require(msg.value >= REGISTRATION_FEE, "Minimum funding is 10 Ether");
+        airlines[msg.sender].isFunded = true;
+        airlinesFunded++;
     }
 
     function getFlightKey

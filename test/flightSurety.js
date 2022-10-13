@@ -89,6 +89,45 @@ contract('Flight Surety Tests', async (accounts) => {
     assert.equal(result, false, "Airline should not be able to register another airline if it hasn't provided funding");
 
   });
- 
+
+  it('(airline) cannot be funded if it is not registered', async () => {
+    
+    // ARRANGE
+    let newAirline = accounts[2];
+    const fee = web3.utils.toWei('10', 'ether')
+    console.log(web3)
+
+    // ACT
+    try {
+        await config.flightSuretyData.fund({from: newAirline, value: fee});
+    }
+    catch(e) {
+        console.log(e)
+    }
+    let result = await config.flightSuretyData.isFunded.call(newAirline); 
+
+    // ASSERT
+    assert.equal(result, false, "Airline should not be able to submit funds if it hasn't been registered");
+
+  });
+
+  it('(airline) cannot be funded if it submits less then 10 ether', async () => {
+    
+    // ARRANGE
+    const fee = web3.utils.toWei('10', 'ether')
+
+    // ACT
+    try {
+        await config.flightSuretyData.fund({from: config.firstAirline, value: fee});
+    }
+    catch(e) {
+        console.log(e)
+    }
+    let result = await config.flightSuretyData.isFunded.call(config.firstAirline); 
+
+    // ASSERT
+    assert.equal(result, false, "Airline should not be able to submit funds if it is less than 10 Ether");
+
+  });
 
 });
