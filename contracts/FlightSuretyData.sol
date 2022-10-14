@@ -211,7 +211,7 @@ contract FlightSuretyData {
     {
         require(this.isAirline(msg.sender), "Airline must be registered");
         require(!this.isFunded(msg.sender), "Airline is already funded");
-        require(msg.value >= REGISTRATION_FEE, "Minimum funding is 10 Ether");
+        require(msg.value == REGISTRATION_FEE, "Minimum funding is 10 Ether");
         airlines[msg.sender].isFunded = true;
         airlinesFunded++;
     }
