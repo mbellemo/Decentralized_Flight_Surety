@@ -1,6 +1,7 @@
 
 var Test = require('../config/testConfig.js');
 var BigNumber = require('bignumber.js');
+const Web3Utils = require('web3-utils');
 
 contract('Flight Surety Tests', async (accounts) => {
 
@@ -113,11 +114,11 @@ contract('Flight Surety Tests', async (accounts) => {
   it('(airline) cannot be funded if it submits less then 10 ether', async () => {
     
     // ARRANGE
-    //const fee = web3.utils.toWei('10', 'ether')
+    const fee = Web3Utils.toWei('10', 'ether')
 
     // ACT
     try {
-        await config.flightSuretyData.fund({from: config.firstAirline, value: config.weiMultiple});
+        await config.flightSuretyData.fund({from: config.firstAirline, value: fee});
     }
     catch(e) {
         console.log(e)
